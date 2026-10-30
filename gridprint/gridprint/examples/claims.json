@@ -1,0 +1,27 @@
+[
+  {
+    "file": "voice-note.wav",
+    "title": "A voice note",
+    "claim": "Voice note recorded in a London flat on Saturday 25 January 2025 at about 16:22."
+  },
+  {
+    "file": "alibi.wav",
+    "title": "An alibi",
+    "claim": "The defendant says this call was recorded on Monday 13 January 2025 at about 11:25, proving he was at home."
+  },
+  {
+    "file": "leaked-meeting.wav",
+    "title": "A leaked meeting",
+    "claim": "Unedited leaked recording of a meeting on Monday 13 January 2025 at about 10:52."
+  },
+  {
+    "file": "whistleblower.wav",
+    "title": "A whistleblower",
+    "claim": "A whistleblower says she recorded this in her office in Canary Wharf, London."
+  },
+  {
+    "file": "ceo-voicemail.wav",
+    "title": "A CEO voicemail",
+    "claim": "Voicemail from our CEO authorising an urgent transfer, left from his office yesterday."
+  }
+]

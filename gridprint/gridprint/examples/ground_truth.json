@@ -1,0 +1,24 @@
+{
+  "voice-note.wav": {
+    "true_start_utc": "2025-01-25T16:22:18Z",
+    "edited": false,
+    "claim_true": true
+  },
+  "alibi.wav": {
+    "true_start_utc": "2025-01-16T11:25:31Z",
+    "claimed": "Monday 13 January 2025 at about 11:25",
+    "claim_true": false
+  },
+  "leaked-meeting.wav": {
+    "true_start_utc": "2025-01-13T10:52:34Z",
+    "edited": "50 s removed at 95 s",
+    "claim_true": false
+  },
+  "whistleblower.wav": {
+    "note": "60 Hz hum: recorded on a 60 Hz grid, not in GB",
+    "claim_true": false
+  },
+  "ceo-voicemail.wav": {
+    "note": "no ENF present (stand-in for a cloned voice)"
+  }
+}

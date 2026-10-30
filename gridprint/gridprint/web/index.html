@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gridprint: when was it really recorded?</title>
+<meta name="description" content="Gridprint reads the mains hum hidden in a recording and matches it to the power grid’s own log, to show when audio was really made and where it was cut.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gridprint: when was it really recorded?">
+<meta property="og:description" content="Gridprint matches a recording’s hidden mains hum to the power grid’s own log, to show when audio was really made and whether anything was cut.">
+<meta property="og:image" content="/web/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F5F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%231D1D1F'/%3E%3Crect x='3' y='3' width='2' height='10' rx='1' fill='%23C46A35'/%3E%3Crect x='7' y='3' width='2' height='10' rx='1' fill='%23ffffff'/%3E%3Crect x='11' y='3' width='2' height='10' rx='1' fill='%232997FF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/web/app.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/" aria-label="Gridprint home"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Gridprint</a>
+    <a class="nav-link" href="#how">How it works</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <h1>When was it really recorded?</h1>
+    <p class="sub">Every plugged-in room hums at the grid’s frequency, and the grid logs that frequency every second. Gridprint reads the hum in a recording and finds the moment it was made.</p>
+  </section>
+
+  <section class="card composer" aria-label="Analyse a recording">
+    <div class="seg" role="tablist" aria-label="How to add a recording">
+      <button type="button" role="tab" aria-selected="true" data-mode="upload">Upload</button>
+      <button type="button" role="tab" aria-selected="false" data-mode="record">Record</button>
+    </div>
+
+    <div class="pane" id="pane-upload">
+      <label class="drop" id="drop" tabindex="0">
+        <input type="file" id="fileInput" accept="audio/*,video/*" hidden>
+        <svg class="drop-icon" viewBox="0 0 48 24" aria-hidden="true"><path d="M2 12h4l3-8 4 16 4-12 3 6 3-4 3 6 4-10 4 14 3-8h9"/></svg>
+        <span class="drop-title">Drop a recording here</span>
+        <span class="drop-sub">or <span class="as-link">choose a file</span>. Voice notes, calls and video soundtracks all work.</span>
+      </label>
+    </div>
+
+    <div class="pane" id="pane-record" hidden>
+      <div class="recorder">
+        <button type="button" class="rec-btn" id="recBtn" aria-label="Start recording"><span></span></button>
+        <div>
+          <p class="rec-time" id="recTime">0:00</p>
+          <p class="hint">Noise suppression is switched off so the hum survives. Record near something plugged in, for two minutes or more.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="file" id="fileRow" hidden>
+      <div class="file-meta">
+        <p class="file-name" id="fileName"></p>
+        <p class="file-size" id="fileSize"></p>
+      </div>
+      <audio id="player" controls preload="metadata"></audio>
+      <button type="button" class="as-link" id="clearFile">Remove</button>
+    </div>
+
+    <label class="field">
+      <span>What is claimed about it?</span>
+      <textarea id="claim" rows="3" placeholder="Recorded in a London flat on the afternoon of 25 January 2025"></textarea>
+    </label>
+
+    <div class="actions">
+      <button type="button" class="btn-primary" id="go" disabled>Analyse recording</button>
+      <p class="hint" id="goHint">Add a recording to begin.</p>
+    </div>
+    <p class="mode-note" id="modeNote" hidden></p>
+  </section>
+
+  <section class="cases" aria-labelledby="casesTitle">
+    <h2 id="casesTitle">Or try a case</h2>
+    <div class="case-list" id="cases"></div>
+  </section>
+
+  <section class="run" id="run" hidden aria-live="polite">
+    <p class="claim-echo" id="claimEcho" hidden></p>
+    <div class="verdict" id="verdict" hidden>
+      <h2 id="vLabel"></h2>
+      <p id="vReason"></p>
+    </div>
+
+    <figure class="card chart-card" id="matchCard" hidden>
+      <figcaption>
+        <h3>The hum, laid on the grid’s own record</h3>
+        <p class="note" id="matchNote"></p>
+      </figcaption>
+      <div class="chart" id="matchChart"></div>
+      <div class="legend">
+        <span class="key key-grid">Grid record</span>
+        <span class="key key-rec">This recording</span>
+        <span class="key key-miss" id="legMiss" hidden>Missing audio</span>
+      </div>
+    </figure>
+
+    <dl class="stats" id="stats" hidden></dl>
+
+    <div class="split">
+      <section class="card steps-card" aria-labelledby="stepsTitle">
+        <h3 id="stepsTitle">How Nemotron investigated</h3>
+        <ol class="steps" id="steps"></ol>
+      </section>
+      <section class="card hum-card" id="humCard" hidden aria-labelledby="humTitle">
+        <h3 id="humTitle">The hum, second by second</h3>
+        <p class="note" id="humNote"></p>
+        <div class="chart" id="humChart"></div>
+      </section>
+    </div>
+
+    <article class="card report" id="report" hidden></article>
+    <footer class="custody" id="custody" hidden></footer>
+    <p class="again" id="againRow" hidden><button type="button" class="btn-secondary" id="again">Analyse another recording</button></p>
+  </section>
+
+  <section class="how" id="how" aria-labelledby="howTitle">
+    <h2 id="howTitle">How it works</h2>
+    <div class="how-grid">
+      <div>
+        <h3>The grid never sits still</h3>
+        <p>Britain’s electricity runs at about 50 Hz, but it drifts by a few hundredths of a hertz every second as demand rises and falls. The whole country shares the same drift, and the grid operator publishes it.</p>
+      </div>
+      <div>
+        <h3>Microphones hear it</h3>
+        <p>Anything plugged in hums faintly at the grid’s frequency. Phones, laptops and cameras record that hum, even when you can’t hear it.</p>
+      </div>
+      <div>
+        <h3>Gridprint matches it</h3>
+        <p>It reads the drift in the hum, finds the one moment in the grid’s record where it fits, and checks that the recording runs unbroken. Nemotron runs the investigation and explains the result.</p>
+      </div>
+    </div>
+    <p class="limits">Gridprint needs hum to work. When a recording has none, it says so rather than guessing, because missing hum proves nothing on its own.</p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <p>Supported by National Energy SO Open Data. Grid frequency data from NESO, used under the NESO Open Data Licence v1.0. Reasoning by NVIDIA Nemotron on Nebius Token Factory. Gridprint is an independent project, not endorsed by NESO, and an investigative aid, not an accredited forensic examination.</p>
+</footer>
+<script src="/web/app.js" defer></script>
+</body>
+</html>
